@@ -1,4 +1,4 @@
-import { Scene } from 'phaser';
+import { GameObjects, Scene } from 'phaser';
 
 export class Game extends Scene
 {
@@ -36,16 +36,25 @@ export class Game extends Scene
                 let screenY = y * tileSize;
 
                 if (lot[y][x] === 0) {
-                    this.add.zone(screenX, screenY, 128, 128);
-                    
+                    this.add.zone(screenX, screenY, 128, 128).setInteractive().setName(`zone_${x}_${y}`);
                 }
             }
         }
         
+
+        // NOTE TO SELF: MAKE THIS APPEAR (CTRL+D or something) WHEN EDIT MODE IS ACTIVATED, 
+        // USE debugGraphics.clear() REMOVE PREVIOUS FRAMES DRAWN
+
         const debugGraphics = this.add.graphics();
         this.children.list.forEach(child => {
             if (child.type === 'Zone') {
                 debugGraphics.lineStyle(2, 0x00ff00).strokeRectShape(child.getBounds());
+            }
+        });
+
+        this.input.on('gameobjectdown', (pointer, gameObject) => {
+            if (gameObject.type === 'Zone') {
+            console.log('ZONE CLICKED', gameObject.name);
             }
         });
 
@@ -58,3 +67,9 @@ export class Game extends Scene
     }
 
 }
+
+/* NOTES:
+    LOOK INTO: `dropZone: true`
+
+
+*/
