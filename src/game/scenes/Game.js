@@ -15,7 +15,6 @@ export class Game extends Scene
         this.cameras.main.setBounds(0, 0, 1280, 1280 );
         this.cameras.main.setZoom(0.5);
         
-        this.add.image(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY, 'bakery');
         this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 128, 'player').setDepth(100);
 
         this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
@@ -34,11 +33,11 @@ export class Game extends Scene
         const tileSize = 256;
 
         const lot = [
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0],
-            [0, 0, 9, 0, 0],
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0],
+            [1, 1, 2, 1, 1],
+            [2, 1, 1, 1, 1],
+            [1, 1, 0, 1, 2],
+            [1, 2, 1, 1, 1],
+            [1, 1, 1, 2, 1],
         ];
 
         for (let y = 0; y < lot.length; y++) {
@@ -48,6 +47,15 @@ export class Game extends Scene
                 let screenY = y * tileSize;
 
                 if (lot[y][x] === 0) {
+                    this.add.image(screenX, screenY, 'bakery').setOrigin(0);
+                    let id = `tile ${x},${y}`;
+                    this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
+                        id: id,
+                        isOccupied: true
+                    });
+                }
+
+                if(lot[y][x] === 1) {
                     let id = `tile ${x},${y}`;
                     this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
                         id: id,
@@ -55,8 +63,13 @@ export class Game extends Scene
                     });
                 }
 
-                if(lot[y][x] === 9) {
-                    this.add.image(screenX, screenY, 'water');
+                if(lot[y][x] === 2) {
+                    this.add.image(screenX, screenY, 'water').setOrigin(0);
+                    let id = `tile ${x},${y}`;
+                    this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
+                        id: id,
+                        isOccupied: true
+                    });
                 }
             }
         }
