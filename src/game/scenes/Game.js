@@ -12,10 +12,10 @@ export class Game extends Scene
         this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0);
         this.cameras.main.setBackgroundColor(0x404040);
         this.physics.world.setBounds(0, 0, 1280, 1280);
-        this.cameras.main.setBounds(0, 0, 1280, 1280 );
-        this.cameras.main.setZoom(0.5);
+        this.cameras.main.setBounds(0, 0, 1280, 1280);
+        this.cameras.main.setZoom(1.75);
         
-        this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 128, 'player').setDepth(100);
+        this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 164, 'player').setDepth(100);
 
         this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
 
@@ -28,7 +28,10 @@ export class Game extends Scene
             right: Phaser.Input.Keyboard.KeyCodes.D,
         });
 
+        this.shop = this.add.zone(640, 640, 256, 256).setOrigin(0.5);
+        this.physics.add.existing(this.shop, true);
 
+        this.physics.add.overlap(this.player, this.shop, this.buildMode, null, this);
 
         const tileSize = 256;
 
@@ -97,7 +100,13 @@ export class Game extends Scene
             }
         });
 
+
         /// --- END OF CREATE ---
+    }
+
+    buildMode () {
+        console.log('BUILD MODE: ACTIVE')
+        this.cameras.main.zoomTo(0.35, 2000, 'Linear');
     }
 
     update()
@@ -121,11 +130,18 @@ export class Game extends Scene
             x += playerSpeed;
         }
 
-        this.player.setVelocity(x, y);
+        this.player.setVelocity(x, y)
 
         if (x !== 0 || y !== 0) {
             this.player.body.velocity.normalize().scale(playerSpeed);
+
+            if (this.cursors.shift.isDown) {
+                this.player.body.velocity.normalize().scale(playerSpeed * 1.5);
+
+            }
         }
+
+        
 
         
 
@@ -135,8 +151,4 @@ export class Game extends Scene
 
 /* NOTES:
     LOOK INTO: `dropZone: true`
-} else {
-            console.log('This zone is already occupied.');
-        }
-});
 */
