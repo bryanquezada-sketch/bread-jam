@@ -9,7 +9,11 @@ export class Game extends Scene
 
     create ()
     {
+        this.player = this.physics.add.sprite()
         this.cameras.main.setBackgroundColor(0x00ff00);
+        this.cameras.main.setBounds(0, 0, 640, 360 );
+        this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
+        this.physics.world.setBounds(0,0, 640, 360);
 
         this.add.image(512, 384, 'background').setAlpha(0.5);
 

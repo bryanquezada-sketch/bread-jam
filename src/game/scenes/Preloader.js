@@ -33,6 +33,21 @@ export class Preloader extends Scene
         this.load.setPath('assets');
 
         this.load.image('logo', 'logo.png');
+
+        this.load.image('player', 'viking-toast');
+
+        this.load.image('b1', 'Building-1.png');
+        this.load.image('b2', 'Building-2.png');
+        this.load.image('b3', 'Building-3.png');
+        this.load.image('b4', 'Building-4.png');
+        this.load.image('b5', 'Building-5.png');
+        this.load.image('b6', 'Building-6.png');
+        this.load.image('b7', 'Building-7.png');
+
+        this.load.spritesheet('buildings', 'Building_SpriteSheet.png', {
+            frameWidth: 128,
+            frameHeight: 128
+        });
     }
 
     create ()

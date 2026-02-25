@@ -9,18 +9,24 @@ import { AUTO, Game } from 'phaser';
 //  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config = {
     type: AUTO,
-    width: 1024,
-    height: 768,
+    width: 640,
+    height: 360,
     parent: 'game-container',
     backgroundColor: '#028af8',
+    pixelArt: true,
+    render: {
+        antialias: false,
+        roundPixels: true
+    },
     scale: {
         mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+//        zoom: 3
     },
     scene: [
         Boot,
         Preloader,
-        MainMenu,
+//        MainMenu,
         MainGame,
         GameOver
     ]
