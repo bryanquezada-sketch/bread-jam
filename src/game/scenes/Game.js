@@ -27,8 +27,6 @@ export class Game extends Scene
             [0, 0, 0, 0, 0],
         ];
 
-        this.add.zone();
-
         for (let y = 0; y < lot.length; y++) {
             for (let x = 0; x < lot.length; x++) {
 
@@ -59,7 +57,7 @@ export class Game extends Scene
         this.input.on('gameobjectdown', (pointer, gameObject) => {
             if (gameObject.type === 'Zone' ) {
                 if (this.children.getFirst('data.value.isOccupied', false)) {
-                    console.log('ZONE CLICKED', target);
+                    console.log('ZONE CLICKED, UnOccupied');
                 };
             }
         });
