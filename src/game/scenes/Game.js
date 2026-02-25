@@ -9,12 +9,14 @@ export class Game extends Scene
 
     create ()
     {
-        this.player = this.physics.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY, 'player').setOrigin(0.5);
+        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0);
         this.cameras.main.setBackgroundColor(0x404040);
-        this.cameras.main.setBounds(0, 0, 640, 640 );
-        this.cameras.main.setZoom(2, 2);
+        this.physics.world.setBounds(0, 0, 1280, 1280);
+        this.cameras.main.setBounds(0, 0, 1280, 1280 );
+
+        this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY, 'player').setDepth(100);
+
         this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
-        this.physics.world.setBounds(0,0, 640, 640);
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -26,14 +28,13 @@ export class Game extends Scene
         });
 
 
-//        this.add.image(512, 384, 'background').setAlpha(0.5);
 
-        const tileSize = 128;
+        const tileSize = 256;
 
         const lot = [
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0],
+            [0, 0, 9, 0, 0],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0],
         ];
@@ -45,7 +46,7 @@ export class Game extends Scene
                 let screenY = y * tileSize;
 
                 if (lot[y][x] === 0) {
-                    this.add.zone(screenX, screenY, 128, 128).setInteractive().setData({
+                    this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
                         id: `${x}_${y}`,
                         isOccupied: false
                     });
@@ -68,7 +69,7 @@ export class Game extends Scene
             if (gameObject.type === 'Zone' ) {
                 if (gameObject.getData('isOccupied') === false) {
                     console.log(`${gameObject.getData('id')} is UnOccupied`);
-                    this.add.image(gameObject.x, gameObject.y, 'b1');
+                    this.add.image(gameObject.x, gameObject.y, 'b1').setOrigin(0).setScale(2);
                     gameObject.setData('isOccupied', true)
                 } else {
                     console.log('This zone is already occupied.');
