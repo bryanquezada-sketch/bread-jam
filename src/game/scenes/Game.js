@@ -57,7 +57,9 @@ export class Game extends Scene
         this.input.on('gameobjectdown', (pointer, gameObject) => {
             if (gameObject.type === 'Zone' ) {
                 if (gameObject.getData('isOccupied') === false) {
-                    console.log(`ZONE CLICKED at ID: ${gameObject.getData('id')} is UnOccupied`);
+                    console.log(`${gameObject.getData('id')} is UnOccupied`);
+                    this.add.image(gameObject.x, gameObject.y, 'b1');
+                    gameObject.setData('isOccupied', true)
                 } else {
                     console.log('This zone is already occupied.');
                 };
@@ -76,6 +78,8 @@ export class Game extends Scene
 
 /* NOTES:
     LOOK INTO: `dropZone: true`
-
+} else {
+            console.log('This zone is already occupied.');
+        }
 });
 */
