@@ -48,10 +48,15 @@ export class Game extends Scene
                 let screenY = y * tileSize;
 
                 if (lot[y][x] === 0) {
+                    let id = `tile ${x},${y}`;
                     this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
-                        id: `${x}_${y}`,
+                        id: id,
                         isOccupied: false
                     });
+                }
+
+                if(lot[y][x] === 9) {
+                    this.add.image(screenX, screenY, 'water');
                 }
             }
         }
@@ -71,7 +76,7 @@ export class Game extends Scene
             if (gameObject.type === 'Zone' ) {
                 if (gameObject.getData('isOccupied') === false) {
                     console.log(`${gameObject.getData('id')} is UnOccupied`);
-                    this.add.image(gameObject.x, gameObject.y, 'b1').setOrigin(0).setScale(2);
+                    this.add.image(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
                     gameObject.setData('isOccupied', true)
                 } else {
                     console.log('This zone is already occupied.');

@@ -35,7 +35,8 @@ export class Preloader extends Scene
         this.load.image('logo', 'logo.png');
 
         this.load.image('bg', 'breadVoid.jpg');
-        this.load.image('bakery', 'bakery.png'),
+        this.load.image('bakery', 'bakery.png');
+        this.load.image('water', 'water.png');
 
         this.load.image('player', 'viking-toast.png');
 
