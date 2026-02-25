@@ -36,7 +36,10 @@ export class Game extends Scene
                 let screenY = y * tileSize;
 
                 if (lot[y][x] === 0) {
-                    this.add.zone(screenX, screenY, 128, 128).setInteractive().setName(`zone_${x}_${y}`);
+                    this.add.zone(screenX, screenY, 128, 128).setInteractive().setData({
+                        id: `${x}_${y}`,
+                        isOccupied: false
+                    });
                 }
             }
         }
@@ -46,6 +49,7 @@ export class Game extends Scene
         // USE debugGraphics.clear() REMOVE PREVIOUS FRAMES DRAWN
 
         const debugGraphics = this.add.graphics();
+
         this.children.list.forEach(child => {
             if (child.type === 'Zone') {
                 debugGraphics.lineStyle(2, 0x00ff00).strokeRectShape(child.getBounds());
@@ -53,8 +57,10 @@ export class Game extends Scene
         });
 
         this.input.on('gameobjectdown', (pointer, gameObject) => {
-            if (gameObject.type === 'Zone') {
-            console.log('ZONE CLICKED', gameObject.name);
+            if (gameObject.type === 'Zone' ) {
+                if (this.children.getFirst('data.value.isOccupied', false)) {
+                    console.log('ZONE CLICKED', target);
+                };
             }
         });
 
