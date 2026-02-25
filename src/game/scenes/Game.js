@@ -9,10 +9,10 @@ export class Game extends Scene
 
     create ()
     {
-        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0);
+        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0).setDisplaySize(1792, 1024);
         this.cameras.main.setBackgroundColor(0x404040);
-        this.physics.world.setBounds(0, 0, 1280, 1280);
-        this.cameras.main.setBounds(0, 0, 1280, 1280);
+        this.physics.world.setBounds(0, 0, 1792, 1024);
+        this.cameras.main.setBounds(0, 0, 1792, 1024);
         this.cameras.main.setZoom(1.75);
         
         this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 164, 'player').setDepth(100);
@@ -36,15 +36,16 @@ export class Game extends Scene
         const tileSize = 256;
 
         const lot = [
-            [1, 1, 2, 1, 1],
-            [2, 1, 1, 1, 1],
-            [1, 1, 0, 1, 2],
-            [1, 2, 1, 1, 1],
-            [1, 1, 1, 2, 1],
+            [1, 1, 2, 1, 1, 1, 1],
+            [2, 1, 1, 1, 1, 1, 2],
+            [1, 1, 0, 1, 2, 1, 1],
+            [1, 2, 1, 1, 1, 1, 2]
         ];
 
+        let lotY = lot[1].length
+
         for (let y = 0; y < lot.length; y++) {
-            for (let x = 0; x < lot.length; x++) {
+            for (let x = 0; x < lot[y].length; x++) {
 
                 let screenX = x * tileSize;
                 let screenY = y * tileSize;
@@ -106,7 +107,13 @@ export class Game extends Scene
 
     buildMode () {
         console.log('BUILD MODE: ACTIVE')
-        this.cameras.main.zoomTo(0.35, 2000, 'Linear');
+
+        const zoomX = this.scale.width / 1792;
+        const zoomY = this.scale.height / 1024;
+
+        const minZoom = Math.max(zoomX, zoomY);
+        // TRY Sine, Power, Quad, Cubic, Quart, Quint, Expo, Elastic, Back, Bounce
+        this.cameras.main.zoomTo(zoomX, 1000, 'Linear');
     }
 
     update()
