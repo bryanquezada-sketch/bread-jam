@@ -13,8 +13,10 @@ export class Game extends Scene
         this.cameras.main.setBackgroundColor(0x404040);
         this.physics.world.setBounds(0, 0, 1280, 1280);
         this.cameras.main.setBounds(0, 0, 1280, 1280 );
-
-        this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY, 'player').setDepth(100);
+        this.cameras.main.setZoom(0.5);
+        
+        this.add.image(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY, 'bakery');
+        this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 128, 'player').setDepth(100);
 
         this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
 
