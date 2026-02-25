@@ -11,9 +11,20 @@ export class Game extends Scene
     {
         this.player = this.physics.add.sprite(this.cameras.main.centerX, this.cameras.main.centerY, 'player').setOrigin(0.5);
         this.cameras.main.setBackgroundColor(0x404040);
-        this.cameras.main.setBounds(0, 0, 640, 360 );
+        this.cameras.main.setBounds(0, 0, 640, 640 );
+        this.cameras.main.setZoom(2, 2);
         this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
-        this.physics.world.setBounds(0,0, 640, 360);
+        this.physics.world.setBounds(0,0, 640, 640);
+
+        this.cursors = this.input.keyboard.createCursorKeys();
+
+        this.wasd = this.input.keyboard.addKeys ({
+            up: Phaser.Input.Keyboard.KeyCodes.W,
+            down: Phaser.Input.Keyboard.KeyCodes.S,
+            left: Phaser.Input.Keyboard.KeyCodes.A,
+            right: Phaser.Input.Keyboard.KeyCodes.D,
+        });
+
 
 //        this.add.image(512, 384, 'background').setAlpha(0.5);
 
@@ -41,7 +52,6 @@ export class Game extends Scene
                 }
             }
         }
-        
 
         // NOTE TO SELF: MAKE THIS APPEAR (CTRL+D or something) WHEN EDIT MODE IS ACTIVATED, 
         // USE debugGraphics.clear() REMOVE PREVIOUS FRAMES DRAWN
@@ -71,6 +81,32 @@ export class Game extends Scene
 
     update()
     {
+        const playerSpeed = 160;
+
+        let x = 0;
+        let y = 0
+
+
+        if (this.cursors.up.isDown || this.wasd.up.isDown ) {
+            y -= playerSpeed;
+        }
+        if (this.cursors.down.isDown || this.wasd.down.isDown ) {
+            y += playerSpeed;
+        }
+        if (this.cursors.left.isDown || this.wasd.left.isDown ) {
+            x -= playerSpeed;
+        }
+        if (this.cursors.right.isDown || this.wasd.right.isDown ) {
+            x += playerSpeed;
+        }
+
+        this.player.setVelocity(x, y);
+
+        if (x !== 0 || y !== 0) {
+            this.player.body.velocity.normalize().scale(playerSpeed);
+        }
+
+        
 
     }
 
