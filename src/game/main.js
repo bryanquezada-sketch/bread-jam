@@ -14,6 +14,13 @@ const config = {
     parent: 'game-container',
     backgroundColor: '#028af8',
     pixelArt: true,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: true,
+        }
+    },
     render: {
         antialias: false,
         roundPixels: true
