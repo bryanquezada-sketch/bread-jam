@@ -9,7 +9,7 @@ export class Game extends Scene
 
     create ()
     {
-        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0).setDisplaySize(1792, 1400).setOrigin(0, 0.25);
+        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0).setDisplaySize(1792, 1500).setOrigin(0, 0.25);
         this.cameras.main.setBackgroundColor(0x404040);
         this.physics.world.setBounds(0, 0, 1792, 1024);
         this.cameras.main.setBounds(0, 0, 1792, 1024);
