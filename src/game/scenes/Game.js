@@ -104,7 +104,10 @@ export class Game extends Scene
 
         this.wallet = 0;
 
-        this.doughCounterDisplay = this.add.text(0, 0, `Dough Collected: ${this.wallet}`);
+        this.doughCounterDisplay = this.add.text(0, 0, `Dough Collected: ${this.wallet}`{
+            fontSize: '64px',
+            fill: '#ffffff' 
+        });
 
         /// --- END OF CREATE ---
     }
