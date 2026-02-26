@@ -92,13 +92,27 @@ export class Game extends Scene
 
         this.doughs = this.physics.add.group();
         
-        this.breads = this.physics.add.group();
+        this.breads = this.physics.add.group({
+            defaultKey: 'dough',
+            maxSize: -1
+        });
 
         this.spawnCircleLocatorX = 0;
         this.spawnCircleLocatorY = 0;
 
+        this.physics.add.collider(this.player, this.doughs, this.collectDough, false, this);
+
+        this.wallet = 0;
+
+        this.doughCounterDisplay = this.add.text(0, 0, `Dough Collected: ${this.wallet}`);
 
         /// --- END OF CREATE ---
+    }
+
+    collectDough(player, dough) {
+        dough.destroy();
+        this.wallet += 1;
+        console.log('Dough collected: ' + this.wallet);
     }
 
     buildMode () {
@@ -153,7 +167,7 @@ export class Game extends Scene
     spawnDough() {
         const rdm = this.spawnCircle.getRandomPoint();
 
-        const dough = this.doughs.create(rdm.x, rdm.y, 'dough');
+        const dough = this.doughs.get(rdm.x, rdm.y, 'dough');
 
         dough.setScale(0);
         //blow up
