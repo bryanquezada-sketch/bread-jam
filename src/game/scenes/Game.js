@@ -76,43 +76,6 @@ export class Game extends Scene
 
         this.incomeGeneration = 0;
 
-        this.construction = (pointer, gameObject) => {
-            if (gameObject.type === 'Zone' ) {
-                if (gameObject.getData('isOccupied') === false) {
-                    console.log(`${gameObject.getData('id')} is UnOccupied`);
-                    this.add.image(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
-                    gameObject.setData('isOccupied', true);
-                    
-                    const spawnCircle = new Phaser.Geom.Circle(gameObject.x + 128, gameObject.y + 128, 64);
-                    const drawCircle = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
-                    drawCircle.strokeCircleShape(spawnCircle);
-                    
-                    this.time.addEvent({
-                        delay: 2000,
-                        callback: () => {
-                            const rdm = spawnCircle.getRandomPoint();
-                            const coin = this.add.sprite(rdm.x, rdm.y, 'coin');
-                            coin.setScale(0);
-                            this.tweens.add({
-                                targets: coin,
-                                scale: 1,
-                                duration: 300,
-                            });
-
-                            this.time.delayedCall(5000, () => {
-                                coin.destroy();
-                            });
-                        },
-                        callbackScope: this,
-                        loop: true
-                    })
-
-                } else {
-                    console.log('This zone is already occupied.');
-                };
-            }
-        }
-
         this.cameraZoomActive = false;
         this.debugGraphics = this.add.graphics();
 
@@ -139,6 +102,44 @@ export class Game extends Scene
 
         }
     }
+
+    construction = (pointer, gameObject) => {
+        if (gameObject.type === 'Zone' ) {
+            if (gameObject.getData('isOccupied') === false) {
+                console.log(`${gameObject.getData('id')} is UnOccupied`);
+                this.add.image(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
+                gameObject.setData('isOccupied', true);
+                
+                const spawnCircle = new Phaser.Geom.Circle(gameObject.x + 128, gameObject.y + 128, 64);
+                const drawCircle = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
+                drawCircle.strokeCircleShape(spawnCircle);
+                
+                this.time.addEvent({
+                    delay: 2000,
+                    callback: () => {
+                        const rdm = spawnCircle.getRandomPoint();
+                        const coin = this.add.sprite(rdm.x, rdm.y, 'coin');
+                        coin.setScale(0);
+                        this.tweens.add({
+                            targets: coin,
+                            scale: 1,
+                            duration: 300,
+                        });
+
+                        this.time.delayedCall(5000, () => {
+                            coin.destroy();
+                        });
+                    },
+                    callbackScope: this,
+                    loop: true
+                })
+
+            } else {
+                console.log('This zone is already occupied.');
+            };
+        }
+    }
+
 
     update()
     {
@@ -187,4 +188,5 @@ export class Game extends Scene
 
 /* NOTES:
     LOOK INTO: `dropZone: true`
+    IF YOU HAVE TIME: ADD FIRE SHOOTING RANDOMLY FROM OUTSIDE THE EDGES OF THE SCREEN, INCREASE INTENSITY WITH EACH BUILDING BUILT. HP = 3, 3 HITS AND YOU'RE TOAST!
 */
