@@ -31,8 +31,6 @@ export class Game extends Scene
 
         const tileSize = 256;
 
-        this.incomeZones = this.add.group();
-
         const lot = [
             [1, 1, 2, 1, 1, 1, 1],
             [2, 1, 1, 0, 1, 1, 2],
@@ -60,7 +58,6 @@ export class Game extends Scene
                         isOccupied: false,
                         income: 'oneCoin'
                     });
-                    this.incomeZones.add(zone);
                 }
 
                 if(lot[y][x] === 2) {
@@ -77,12 +74,39 @@ export class Game extends Scene
             }
         }
 
+        this.incomeGeneration = 0;
+
         this.construction = (pointer, gameObject) => {
             if (gameObject.type === 'Zone' ) {
                 if (gameObject.getData('isOccupied') === false) {
                     console.log(`${gameObject.getData('id')} is UnOccupied`);
                     this.add.image(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
-                    gameObject.setData('isOccupied', true)
+                    gameObject.setData('isOccupied', true);
+                    
+                    const spawnCircle = new Phaser.Geom.Circle(gameObject.x + 128, gameObject.y + 128, 64);
+                    const drawCircle = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
+                    drawCircle.strokeCircleShape(spawnCircle);
+                    
+                    this.time.addEvent({
+                        delay: 2000,
+                        callback: () => {
+                            const rdm = spawnCircle.getRandomPoint();
+                            const coin = this.add.sprite(rdm.x, rdm.y, 'coin');
+                            coin.setScale(0);
+                            this.tweens.add({
+                                targets: coin,
+                                scale: 1,
+                                duration: 300,
+                            });
+
+                            this.time.delayedCall(5000, () => {
+                                coin.destroy();
+                            });
+                        },
+                        callbackScope: this,
+                        loop: true
+                    })
+
                 } else {
                     console.log('This zone is already occupied.');
                 };
@@ -97,7 +121,7 @@ export class Game extends Scene
     }
 
     buildMode () {
-        console.log('BUILD MODE: ACTIVE')
+        //console.log('BUILD MODE: ACTIVE')
 
         if (this.cameraZoomActive === false) {
             const zoom = Math.max(this.scale.width / 1792, this.scale.height / 1024);
@@ -155,8 +179,9 @@ export class Game extends Scene
             this.cameras.main.zoomTo(1, 500, 'Expo.easeIn', true);
             this.debugGraphics.clear()
             this.input.off('gameobjectdown', this.construction, this);
-            console.log("Player stopped shopping")
+            //console.log("Player stopped shopping")
         }
+        //console.log('Current Income: ' + this.incomeGeneration)
     }
 }
 
