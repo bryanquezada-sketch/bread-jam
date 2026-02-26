@@ -9,11 +9,11 @@ export class Game extends Scene
 
     create ()
     {
-        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0).setDisplaySize(1792, 724);
+        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0).setDisplaySize(1792, 1400).setOrigin(0, 0.25);
         this.cameras.main.setBackgroundColor(0x404040);
         this.physics.world.setBounds(0, 0, 1792, 1024);
         this.cameras.main.setBounds(0, 0, 1792, 1024);
-        this.cameras.main.setZoom(1.75);
+    //    this.cameras.main.setZoom(1.75);
         
         this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 32, 'player').setDepth(100);
 
@@ -37,8 +37,7 @@ export class Game extends Scene
             down: Phaser.Input.Keyboard.KeyCodes.S,
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D,
-        });
-
+        })
 
         const tileSize = 256;
 
@@ -102,7 +101,7 @@ export class Game extends Scene
             this.cameras.main.zoomTo(zoom, 1000, 'Expo.easeOut', true);
 
             this.children.list.forEach(child => {
-                if (child.type === 'Zone') {
+                if (child.type === 'Zone' && child !== this.vacuum) {
                     this.debugGraphics.lineStyle(2, 0x00ff00).strokeRectShape(child.getBounds());
                 }
             });
@@ -199,27 +198,32 @@ export class Game extends Scene
             x += playerSpeed;
         }
 
-        this.player.setVelocity(x, y)
+        this.player.setVelocity(x, y);
+        this.vacuum.body.setVelocity(x, y);
 
         if (x !== 0 || y !== 0) {
             this.player.body.velocity.normalize().scale(playerSpeed);
 
+            this.vacuum.x = this.player.x;
+            this.vacuum.y = this.player.y;
+
+
             if (this.cursors.shift.isDown) {
                 this.player.body.velocity.normalize().scale(playerSpeed * 1.5);
-
             }
         }
 
-        const playerIsShopping = this.physics.overlap(this.player, this.shop)
+
+        const playerIsShopping = this.physics.overlap(this.player, this.shop);
 
         if (this.cameraZoomActive && !playerIsShopping) {
             this.cameraZoomActive = false;
             this.cameras.main.zoomTo(1, 500, 'Expo.easeIn', true);
             this.debugGraphics.clear()
             this.input.off('gameobjectdown', this.construction, this);
-            //console.log("Player stopped shopping")
+            //console.log("Player stopped shopping");
         }
-        //console.log('Current Income: ' + this.incomeGeneration)
+        //console.log('Current Income: ' + this.incomeGeneration);
     }
 }
 
