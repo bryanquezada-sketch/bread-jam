@@ -20,6 +20,7 @@ export class Game extends Scene
         //this.vacuum = new Phaser.Geom.Circle(this.player.x, this.player.y, 64);
         //What's the difference between .world.enable and .add.existing?
         //Why is it easier to use a sprite rather than just use a circle zone?
+        //CONSIDER MAKING PLAYER A CIRCLE INSTEAD...IF YOU CAN"T ADD FIRE!
         this.vacuum = this.add.zone(this.player.x, this.player.y, 128, 128);
         this.physics.add.existing(this.vacuum);
         this.vacuum.body.setCircle(64);
