@@ -17,6 +17,7 @@ export class Game extends Scene
         
         this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 32, 'player').setDepth(100);
 
+
         //this.vacuum = new Phaser.Geom.Circle(this.player.x, this.player.y, 64);
         //What's the difference between .world.enable and .add.existing?
         //Why is it easier to use a sprite rather than just use a circle zone?
@@ -89,9 +90,12 @@ export class Game extends Scene
         this.cameraZoomActive = false;
         this.debugGraphics = this.add.graphics();
 
+        this.doughs = this.physics.add.group();
         
+        this.breads = this.physics.add.group();
 
-        
+        this.spawnCircleLocatorX = 0;
+        this.spawnCircleLocatorY = 0;
 
 
         /// --- END OF CREATE ---
@@ -121,58 +125,11 @@ export class Game extends Scene
         if (gameObject.type === 'Zone' ) {
             if (gameObject.getData('isOccupied') === false) {
                 console.log(`${gameObject.getData('id')} is UnOccupied`);
-                this.add.image(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
                 gameObject.setData('isOccupied', true);
-                
-                const spawnCircle = new Phaser.Geom.Circle(gameObject.x + 128, gameObject.y + 128, 64);
-                const drawCircle = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
-                drawCircle.strokeCircleShape(spawnCircle);
-                
-                this.time.addEvent({
-                    delay: 2000,
-                    callback: () => {
-                        const rdm = spawnCircle.getRandomPoint();
-                        const coin = this.physics.add.sprite(rdm.x, rdm.y, 'coin');
-                        coin.setScale(0);
-                        //blow up
-                        this.tweens.add({
-                            targets: coin,
-                            scale: 1,
-                            duration: 300,
-                        });
-
-                        // flicker
-                        this.tweens.add({
-                            targets: coin,
-                            alpha: 0.2,
-                            duration: 100,
-                            ease: 'Linear',
-                            yoyo: true,
-                            repeat: -1
-                        })
-
-                        //bounce
-                        this.tweens.add({
-                            targets: coin,
-                            y: coin.y -120,
-                            duration: 450,
-                            //try cubic
-                            ease: 'Back.easeOut',
-                            yoyo: true,
-                            //try cubic
-                            easeYoyo: 'Quad.easeIn',
-                            onComplete: () => {
-                                console.log('ADD SOUND FX HERE');
-                            }
-                        });
-
-                        this.time.delayedCall(5000, () => {
-                            coin.destroy();
-                        });
-                    },
-                    callbackScope: this,
-                    loop: true
-                })
+                const bread = this.breads.create(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
+                this.spawnCircleLocatorX = gameObject.x;
+                this.spawnCircleLocatorY = gameObject.y;
+                this.createSpawner();
 
             } else {
                 console.log('This zone is already occupied.');
@@ -180,6 +137,61 @@ export class Game extends Scene
         }
     }
 
+    createSpawner() {
+        this.spawnCircle = new Phaser.Geom.Circle(this.spawnCircleLocatorX + 128, this.spawnCircleLocatorY + 128, 128);
+        const drawCircle = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
+        drawCircle.strokeCircleShape(this.spawnCircle);
+
+        this.time.addEvent({
+            delay: 2000,
+            callback: this.spawnDough,
+            callbackScope: this,
+            loop: true
+        })
+    }
+
+    spawnDough() {
+        const rdm = this.spawnCircle.getRandomPoint();
+
+        const dough = this.doughs.create(rdm.x, rdm.y, 'dough');
+
+        dough.setScale(0);
+        //blow up
+        this.tweens.add({
+            targets: dough,
+            scale: 1,
+            duration: 300,
+        });
+
+        // flicker
+        this.tweens.add({
+            targets: dough,
+            alpha: 0.2,
+            duration: 100,
+            ease: 'Linear',
+            yoyo: true,
+            repeat: -1
+        })
+
+        //bounce
+        this.tweens.add({
+            targets: dough,
+            y: dough.y -120,
+            duration: 450,
+            //try cubic
+            ease: 'Back.easeOut',
+            yoyo: true,
+            //try cubic
+            easeYoyo: 'Quad.easeIn',
+            onComplete: () => {
+                console.log('ADD SOUND FX HERE');
+            }
+        });
+
+        this.time.delayedCall(5000, () => {
+            dough.destroy();
+        });
+    }
 
     update()
     {
