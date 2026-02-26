@@ -89,6 +89,10 @@ export class Game extends Scene
         this.cameraZoomActive = false;
         this.debugGraphics = this.add.graphics();
 
+        
+
+        
+
 
         /// --- END OF CREATE ---
     }
@@ -128,7 +132,7 @@ export class Game extends Scene
                     delay: 2000,
                     callback: () => {
                         const rdm = spawnCircle.getRandomPoint();
-                        const coin = this.add.sprite(rdm.x, rdm.y, 'coin');
+                        const coin = this.physics.add.sprite(rdm.x, rdm.y, 'coin');
                         coin.setScale(0);
                         //blow up
                         this.tweens.add({
