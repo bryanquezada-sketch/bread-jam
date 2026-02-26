@@ -120,10 +120,36 @@ export class Game extends Scene
                         const rdm = spawnCircle.getRandomPoint();
                         const coin = this.add.sprite(rdm.x, rdm.y, 'coin');
                         coin.setScale(0);
+                        //blow up
                         this.tweens.add({
                             targets: coin,
                             scale: 1,
                             duration: 300,
+                        });
+
+                        // flicker
+                        this.tweens.add({
+                            targets: coin,
+                            alpha: 0.2,
+                            duration: 100,
+                            ease: 'Linear',
+                            yoyo: true,
+                            repeat: -1
+                        })
+
+                        //bounce
+                        this.tweens.add({
+                            targets: coin,
+                            y: coin.y -120,
+                            duration: 450,
+                            //try cubic
+                            ease: 'Back.easeOut',
+                            yoyo: true,
+                            //try cubic
+                            easeYoyo: 'Quad.easeIn',
+                            onComplete: () => {
+                                console.log('ADD SOUND FX HERE');
+                            }
                         });
 
                         this.time.delayedCall(5000, () => {
