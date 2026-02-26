@@ -17,6 +17,14 @@ export class Game extends Scene
         
         this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 32, 'player').setDepth(100);
 
+        //this.vacuum = new Phaser.Geom.Circle(this.player.x, this.player.y, 64);
+        this.vacuum = this.add.zone(this.player.x, this.player.y, 128, 128);
+        this.physics.add.existing(this.vacuum);
+        this.vacuum.body.setCircle(64);
+
+        //const vacuumCircle = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
+        //vacuumCircle.strokeCircleShape(this.vacuum);
+
         this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
 
         this.cursors = this.input.keyboard.createCursorKeys();
