@@ -9,13 +9,13 @@ export class Game extends Scene
 
     create ()
     {
-        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0).setDisplaySize(1792, 1024);
+        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0).setDisplaySize(1792, 724);
         this.cameras.main.setBackgroundColor(0x404040);
         this.physics.world.setBounds(0, 0, 1792, 1024);
         this.cameras.main.setBounds(0, 0, 1792, 1024);
         this.cameras.main.setZoom(1.75);
         
-        this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 164, 'player').setDepth(100);
+        this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 32, 'player').setDepth(100);
 
         this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
 
@@ -28,21 +28,17 @@ export class Game extends Scene
             right: Phaser.Input.Keyboard.KeyCodes.D,
         });
 
-        this.shop = this.add.zone(640, 640, 256, 256).setOrigin(0.5);
-        this.physics.add.existing(this.shop, true);
-
-        this.physics.add.overlap(this.player, this.shop, this.buildMode, null, this);
 
         const tileSize = 256;
 
+        this.incomeZones = this.add.group();
+
         const lot = [
             [1, 1, 2, 1, 1, 1, 1],
-            [2, 1, 1, 1, 1, 1, 2],
-            [1, 1, 0, 1, 2, 1, 1],
+            [2, 1, 1, 0, 1, 1, 2],
+            [1, 1, 1, 1, 2, 1, 1],
             [1, 2, 1, 1, 1, 1, 2]
         ];
-
-        let lotY = lot[1].length
 
         for (let y = 0; y < lot.length; y++) {
             for (let x = 0; x < lot[y].length; x++) {
@@ -52,44 +48,36 @@ export class Game extends Scene
 
                 if (lot[y][x] === 0) {
                     this.add.image(screenX, screenY, 'bakery').setOrigin(0);
-                    let id = `tile ${x},${y}`;
-                    this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
-                        id: id,
-                        isOccupied: true
-                    });
+                    this.shop = this.add.zone(screenX, screenY, 256, 256).setOrigin(0);
+                    this.physics.add.existing(this.shop, true);
+                    this.physics.add.overlap(this.player, this.shop, this.buildMode, null, this);
                 }
 
                 if(lot[y][x] === 1) {
                     let id = `tile ${x},${y}`;
-                    this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
+                    let zone = this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
                         id: id,
-                        isOccupied: false
+                        isOccupied: false,
+                        income: 'oneCoin'
                     });
+                    this.incomeZones.add(zone);
                 }
 
                 if(lot[y][x] === 2) {
                     this.add.image(screenX, screenY, 'water').setOrigin(0);
                     let id = `tile ${x},${y}`;
-                    this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
+                    let zone = this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
                         id: id,
                         isOccupied: true
+                    });
+                    this.physics.add.existing(zone, true);
+                    this.physics.add.collider(this.player, zone, (obj1, obj2) => {
                     });
                 }
             }
         }
 
-        // NOTE TO SELF: MAKE THIS APPEAR (CTRL+D or something) WHEN EDIT MODE IS ACTIVATED, 
-        // USE debugGraphics.clear() REMOVE PREVIOUS FRAMES DRAWN
-
-        const debugGraphics = this.add.graphics();
-
-        this.children.list.forEach(child => {
-            if (child.type === 'Zone') {
-                debugGraphics.lineStyle(2, 0x00ff00).strokeRectShape(child.getBounds());
-            }
-        });
-
-        this.input.on('gameobjectdown', (pointer, gameObject) => {
+        this.construction = (pointer, gameObject) => {
             if (gameObject.type === 'Zone' ) {
                 if (gameObject.getData('isOccupied') === false) {
                     console.log(`${gameObject.getData('id')} is UnOccupied`);
@@ -99,7 +87,10 @@ export class Game extends Scene
                     console.log('This zone is already occupied.');
                 };
             }
-        });
+        }
+
+        this.cameraZoomActive = false;
+        this.debugGraphics = this.add.graphics();
 
 
         /// --- END OF CREATE ---
@@ -108,12 +99,26 @@ export class Game extends Scene
     buildMode () {
         console.log('BUILD MODE: ACTIVE')
 
-        const zoomX = this.scale.width / 1792;
-        const zoomY = this.scale.height / 1024;
+        if (this.cameraZoomActive === false) {
+            const zoom = Math.max(this.scale.width / 1792, this.scale.height / 1024);
+            this.cameras.main.zoomTo(zoom, 1000, 'Expo.easeOut', true);
 
-        const minZoom = Math.max(zoomX, zoomY);
-        // TRY Sine, Power, Quad, Cubic, Quart, Quint, Expo, Elastic, Back, Bounce
-        this.cameras.main.zoomTo(zoomX, 1000, 'Linear');
+            this.children.list.forEach(child => {
+                if (child.type === 'Zone') {
+                    this.debugGraphics.lineStyle(2, 0x00ff00).strokeRectShape(child.getBounds());
+                }
+            });
+
+            this.cameraZoomActive = true;
+
+            this.input.on('gameobjectdown', this.construction, this);
+
+        }
+
+        // NOTE TO SELF: MAKE THIS APPEAR (CTRL+D or something) WHEN EDIT MODE IS ACTIVATED, 
+        // USE debugGraphics.clear() REMOVE PREVIOUS FRAMES DRAWN
+
+        
     }
 
     update()
@@ -148,8 +153,21 @@ export class Game extends Scene
             }
         }
 
-        
+        const playerIsShopping = this.physics.overlap(this.player, this.shop)
 
+        if (this.cameraZoomActive && !playerIsShopping) {
+            this.cameraZoomActive = false;
+            this.cameras.main.zoomTo(1, 500, 'Expo.easeIn', true);
+            this.debugGraphics.clear()
+            this.input.off('gameobjectdown', this.construction, this);
+            console.log("Player stopped shopping")
+        }
+
+        /*
+        if (child.type === 'Zone' && child.getData('income')) {
+            console.log("Income ")
+        }
+        */
         
 
     }
