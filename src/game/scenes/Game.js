@@ -114,11 +114,6 @@ export class Game extends Scene
             this.input.on('gameobjectdown', this.construction, this);
 
         }
-
-        // NOTE TO SELF: MAKE THIS APPEAR (CTRL+D or something) WHEN EDIT MODE IS ACTIVATED, 
-        // USE debugGraphics.clear() REMOVE PREVIOUS FRAMES DRAWN
-
-        
     }
 
     update()
@@ -162,16 +157,7 @@ export class Game extends Scene
             this.input.off('gameobjectdown', this.construction, this);
             console.log("Player stopped shopping")
         }
-
-        /*
-        if (child.type === 'Zone' && child.getData('income')) {
-            console.log("Income ")
-        }
-        */
-        
-
     }
-
 }
 
 /* NOTES:
