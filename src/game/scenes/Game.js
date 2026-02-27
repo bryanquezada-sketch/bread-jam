@@ -103,16 +103,19 @@ export class Game extends Scene
             maxSize: 150
         });
         
-        this.breads = this.physics.add.group({});
+        this.breads = this.physics.add.group();
 
-        this.bullets = this.physics.add.group();
+        this.bullets = this.physics.add.group({
+            defaultKey: 'fire'
+        });
 
         this.spawnCircleLocatorX = 0;
         this.spawnCircleLocatorY = 0;
 
         this.physics.add.overlap(this.player, this.doughs, this.collectDough, false, this);
 
-        
+        //Change 20 to test wall hugging bullets distance. Or just fucking make a sprite to show where 20 is you hack. Or learn math you pleb.
+        this.bulletSpawn = Phaser.Math.Between(0, this.scale.width - 20);
 
         /// --- END OF CREATE ---
     }
@@ -247,9 +250,13 @@ export class Game extends Scene
     }
 
     despawnDough(dough) {
-        if (dough.flickerTimer) dough.flickerTimer.remove();
+        if (dough.flickerTimer) {
+            dough.flickerTimer.remove();
+        }
 
-        if (dough.despawnTimer) dough.despawnTimer.remove();
+        if (dough.despawnTimer) {
+            dough.despawnTimer.remove();
+        }
 
         this.tweens.killTweensOf(dough);
         this.doughs.killAndHide(dough);
