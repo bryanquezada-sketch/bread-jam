@@ -139,6 +139,7 @@ export class Game extends Scene
 
     construction = (pointer, gameObject) => {
 
+        //CHARGES YOU FOR BREAD, THE FUCKING CAPITALIST PIG
         if (gameObject.type === 'Zone' ) {
             if (gameObject.getData('isOccupied') === false) {
                 if (this.doughCount >= 10) {
@@ -155,6 +156,23 @@ export class Game extends Scene
                 };
             }
         }
+
+        /* //MAKES SHOP FAKE FOR TESTING, LETS YOU SPAWN BREAD TILES ON CLICK
+
+            if (gameObject.type === 'Zone' ) {
+            if (gameObject.getData('isOccupied') === false) {
+                console.log(`${gameObject.getData('id')} is UnOccupied`);
+                gameObject.setData('isOccupied', true);
+                const bread = this.breads.create(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
+                this.spawnCircleLocatorX = gameObject.x;
+                this.spawnCircleLocatorY = gameObject.y;
+                this.createSpawner();
+
+            } else {
+                console.log('This zone is already occupied.');
+            };
+        }
+        */
     }
 
     createSpawner() {
