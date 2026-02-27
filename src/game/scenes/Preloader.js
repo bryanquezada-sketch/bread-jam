@@ -34,19 +34,33 @@ export class Preloader extends Scene
 
         this.load.image('logo', 'logo.png');
 
+
+        this.load.image('void', 'void_bread.jpg');
         this.load.image('bg', 'breadVoid.jpg');
         this.load.image('bakery', 'bakery.png');
         this.load.image('water', 'water.png');
 
         this.load.image('player', 'viking-toast.png');
 
-        this.load.image('b1', 'Building-1.png');
-        this.load.image('b2', 'Building-2.png');
-        this.load.image('b3', 'Building-3.png');
-        this.load.image('b4', 'Building-4.png');
-        this.load.image('b5', 'Building-5.png');
-        this.load.image('b6', 'Building-6.png');
-        this.load.image('b7', 'Building-7.png');
+        this.load.image('b1', 'bagels.jpg');
+        this.load.image('b2', 'baguettes.jpg');
+        this.load.image('b3', 'breads.jpeg');
+        this.load.image('b4', 'breads2.jpg');
+        this.load.image('b5', 'breads3.jpg');
+        this.load.image('b6', 'breadsticks.png');
+        this.load.image('b7', 'challah.png');
+        this.load.image('b', 'croissants.jpeg');
+        this.load.image('b', 'dinner_rolls.jpg');
+        this.load.image('b', 'donuts.jpg');
+        this.load.image('b', 'hotdog.jpeg');
+        this.load.image('b', 'naan.jpg');
+        this.load.image('b', 'pita.jpg');
+        this.load.image('b', 'pretzles.jpg');
+        this.load.image('b', 'pumpernickel.jpg');
+        this.load.image('b', 'ring.jpg');
+        this.load.image('b', 'sliced.jpeg');
+        this.load.image('b', 'sourdough.jpg');
+        this.load.image('b', 'swiss,jpg');
 
         this.load.spritesheet('buildings', 'Building_SpriteSheet.png', {
             frameWidth: 128,
