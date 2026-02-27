@@ -9,6 +9,8 @@ export class Game extends Scene
 
     create ()
     {
+        this.scene.launch('UIScene');
+        this.scene.bringToTop('UIScene'); 
         this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0).setDisplaySize(1792, 1500).setOrigin(0, 0.25);
         this.cameras.main.setBackgroundColor(0x404040);
         this.physics.world.setBounds(0, 0, 1792, 1024);
@@ -102,20 +104,16 @@ export class Game extends Scene
 
         this.physics.add.collider(this.player, this.doughs, this.collectDough, false, this);
 
-        this.wallet = 0;
 
-        this.doughCounterDisplay = this.add.text(0, 0, `Dough Collected: ${this.wallet}`{
-            fontSize: '64px',
-            fill: '#ffffff' 
-        });
+        
 
         /// --- END OF CREATE ---
     }
 
     collectDough(player, dough) {
         dough.destroy();
-        this.wallet += 1;
-        console.log('Dough collected: ' + this.wallet);
+
+        this.events.emit('addDough', 1);
     }
 
     buildMode () {
