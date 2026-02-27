@@ -19,7 +19,7 @@ export class Game extends Scene
         
         this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 32, 'player').setDepth(100);
 
-        this.doughCount = 0;
+        this.doughCount = 10;
 
         //this.vacuum = new Phaser.Geom.Circle(this.player.x, this.player.y, 64);
         //What's the difference between .world.enable and .add.existing?
@@ -141,16 +141,19 @@ export class Game extends Scene
 
         if (gameObject.type === 'Zone' ) {
             if (gameObject.getData('isOccupied') === false) {
-                console.log(`${gameObject.getData('id')} is UnOccupied`);
-                gameObject.setData('isOccupied', true);
-                const bread = this.breads.create(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
-                this.spawnCircleLocatorX = gameObject.x;
-                this.spawnCircleLocatorY = gameObject.y;
-                this.createSpawner();
-
-            } else {
+                if (this.doughCount >= 10) {
+                    this.doughCount -= 10;
+                    this.events.emit('addDough', this.doughCount);
+                    console.log(`${gameObject.getData('id')} is UnOccupied`);
+                    gameObject.setData('isOccupied', true);
+                    const bread = this.breads.create(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
+                    this.spawnCircleLocatorX = gameObject.x;
+                    this.spawnCircleLocatorY = gameObject.y;
+                    this.createSpawner();
+                } else {
                 console.log('This zone is already occupied.');
-            };
+                };
+            }
         }
     }
 

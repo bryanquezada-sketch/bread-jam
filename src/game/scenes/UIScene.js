@@ -8,7 +8,7 @@ export class UIScene extends Scene {
     }
     
     create(){
-        this.doughCounter = this.add.text(0, 0, `Yo Dough: 0`, {
+        this.doughCounter = this.add.text(0, 0, `Yo Dough: 10`, {
             fontSize: '32px',
             fill: '#ffffff' 
         });
