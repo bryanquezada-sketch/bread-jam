@@ -138,6 +138,7 @@ export class Game extends Scene
     }
 
     construction = (pointer, gameObject) => {
+
         if (gameObject.type === 'Zone' ) {
             if (gameObject.getData('isOccupied') === false) {
                 console.log(`${gameObject.getData('id')} is UnOccupied`);
@@ -171,37 +172,32 @@ export class Game extends Scene
 
         const dough = this.doughs.get(rdm.x, rdm.y, 'dough');
 
-        dough.setScale(0);
-        //blow up
-        this.tweens.add({
-            targets: dough,
-            scale: 1,
-            duration: 300,
-        });
-
-        // flicker
-        this.tweens.add({
-            targets: dough,
-            alpha: 0.2,
-            duration: 100,
-            ease: 'Linear',
-            yoyo: true,
-            repeat: -1
-        })
+        
 
         //bounce
         this.tweens.add({
             targets: dough,
-            y: dough.y -120,
-            duration: 450,
+            y: dough.y -30,
+            duration: 250,
             //try cubic
-            ease: 'Back.easeOut',
+            ease: 'Quad.easeOut',
             yoyo: true,
-            //try cubic
-            easeYoyo: 'Quad.easeIn',
+            //easeYoyo: 'Quad.easeIn',
             onComplete: () => {
                 console.log('ADD SOUND FX HERE');
             }
+        });
+
+        this.time.delayedCall(2000, () => {
+            // flicker
+            this.tweens.add({
+                targets: dough,
+                alpha: 0.2,
+                duration: 100,
+                ease: 'Linear',
+                yoyo: true,
+                repeat: -1
+            });
         });
 
         this.time.delayedCall(5000, () => {

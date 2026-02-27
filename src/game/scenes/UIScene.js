@@ -8,15 +8,15 @@ export class UIScene extends Scene {
     }
     
     create(){
-        this.doughCounter = this.add.text(0, 0, `Dough Bucket: 0`, {
-            fontSize: '48px',
+        this.doughCounter = this.add.text(0, 0, `Yo Dough: 0`, {
+            fontSize: '32px',
             fill: '#ffffff' 
         });
 
         const gameScene = this.scene.get('Game');
 
         gameScene.events.on('addDough', (score) => {
-            this.doughCounter.setText(`Dough Bucket: ${score}`);
+            this.doughCounter.setText(`Yo Dough: ${score}`);
         }, this);
 
     }
