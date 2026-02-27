@@ -48,19 +48,19 @@ export class Preloader extends Scene
         this.load.image('b4', 'breads2.jpg');
         this.load.image('b5', 'breads3.jpg');
         this.load.image('b6', 'breadsticks.png');
-        this.load.image('b7', 'challah.png');
+        this.load.image('b7', 'challah.jpg');
         this.load.image('b8', 'croissants.jpeg');
         this.load.image('b9', 'dinner_rolls.jpg');
         this.load.image('b10', 'donuts.jpg');
         this.load.image('b11', 'hotdog.jpeg');
         this.load.image('b12', 'naan.jpg');
         this.load.image('b13', 'pita.jpg');
-        this.load.image('b14', 'pretzles.jpg');
+        this.load.image('b14', 'pretzels.jpg');
         this.load.image('b15', 'pumpernickel.jpg');
         this.load.image('b16', 'ring.jpg');
         this.load.image('b17', 'sliced.jpeg');
         this.load.image('b18', 'sourdough.jpg');
-        this.load.image('b19', 'swiss,jpg');
+        this.load.image('b19', 'swiss.jpg');
 
         this.load.spritesheet('buildings', 'Building_SpriteSheet.png', {
             frameWidth: 128,

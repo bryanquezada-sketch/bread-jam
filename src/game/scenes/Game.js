@@ -20,6 +20,9 @@ export class Game extends Scene
         this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 32, 'player').setDepth(100);
 
         this.doughCount = 10;
+        this.breadBaked = 0;
+
+        this.breadAssets = ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'b10', 'b11', 'b12', 'b13', 'b14', 'b15', 'b16', 'b17', 'b18', 'b19'];
 
         //this.vacuum = new Phaser.Geom.Circle(this.player.x, this.player.y, 64);
         //What's the difference between .world.enable and .add.existing?
@@ -137,9 +140,11 @@ export class Game extends Scene
         }
     }
 
+    
     construction = (pointer, gameObject) => {
 
-        //CHARGES YOU FOR BREAD, THE FUCKING CAPITALIST PIG
+        //CHARGES YOU FOR BREAD, THE FUCKING CAPITALIST PIG 
+        /*
         if (gameObject.type === 'Zone' ) {
             if (gameObject.getData('isOccupied') === false) {
                 if (this.doughCount >= 10) {
@@ -147,7 +152,7 @@ export class Game extends Scene
                     this.events.emit('addDough', this.doughCount);
                     console.log(`${gameObject.getData('id')} is UnOccupied`);
                     gameObject.setData('isOccupied', true);
-                    const bread = this.breads.create(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
+                    const bread = this.breads.create(gameObject.x, gameObject.y, Phaser.Math.RND.pick(this.breadAssets)).setOrigin(0);
                     this.spawnCircleLocatorX = gameObject.x;
                     this.spawnCircleLocatorY = gameObject.y;
                     this.createSpawner();
@@ -156,23 +161,30 @@ export class Game extends Scene
                 };
             }
         }
+        */
 
-        /* //MAKES SHOP FAKE FOR TESTING, LETS YOU SPAWN BREAD TILES ON CLICK
+        /**/
+        //MAKES SHOP FAKE FOR TESTING, LETS YOU SPAWN BREAD TILES ON CLICK
 
             if (gameObject.type === 'Zone' ) {
             if (gameObject.getData('isOccupied') === false) {
                 console.log(`${gameObject.getData('id')} is UnOccupied`);
                 gameObject.setData('isOccupied', true);
-                const bread = this.breads.create(gameObject.x, gameObject.y, 'b2').setOrigin(0).setScale(2);
+                const bread = this.breads.create(gameObject.x, gameObject.y, Phaser.Math.RND.pick(this.breadAssets)).setOrigin(0);
                 this.spawnCircleLocatorX = gameObject.x;
                 this.spawnCircleLocatorY = gameObject.y;
                 this.createSpawner();
-
+                this.breadBaked += 1;
+                console.log(this.breadBaked);
+                if (this.breadBaked === 21) {
+                    console.log('YOU WIN!');
+                    this.events.emit('playerWon');
+                }
             } else {
                 console.log('This zone is already occupied.');
             };
         }
-        */
+        
     }
 
     createSpawner() {
