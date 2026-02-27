@@ -19,6 +19,8 @@ export class Game extends Scene
         
         this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 32, 'player').setDepth(100);
 
+        this.player.setCollideWorldBounds(true);
+
         this.doughCount = 10;
         this.breadBaked = 0;
 
@@ -96,31 +98,24 @@ export class Game extends Scene
         this.cameraZoomActive = false;
         this.debugGraphics = this.add.graphics();
 
-        this.doughs = this.physics.add.group();
-        
-        this.breads = this.physics.add.group({
+        this.doughs = this.physics.add.group({
             defaultKey: 'dough',
-            maxSize: -1
+            maxSize: 150
         });
+        
+        this.breads = this.physics.add.group({});
 
         this.bullets = this.physics.add.group();
 
         this.spawnCircleLocatorX = 0;
         this.spawnCircleLocatorY = 0;
 
-        this.physics.add.collider(this.player, this.doughs, this.collectDough, false, this);
+        this.physics.add.overlap(this.player, this.doughs, this.collectDough, false, this);
 
         
 
         /// --- END OF CREATE ---
     }
-
-    collectDough(player, dough) {
-        dough.destroy();
-        this.doughCount += 1;
-        this.events.emit('addDough', this.doughCount);
-    }
-
     buildMode () {
         //console.log('BUILD MODE: ACTIVE')
 
@@ -204,9 +199,17 @@ export class Game extends Scene
     spawnDough() {
         const rdm = this.spawnCircle.getRandomPoint();
 
-        const dough = this.doughs.get(rdm.x, rdm.y, 'dough');
+        const dough = this.doughs.get(rdm.x, rdm.y);
 
-        
+
+        if (!dough) return;
+
+        dough.body.reset(rdm.x, rdm.y);
+        dough.setActive(true);
+        dough.setVisible(true);
+        dough.setAlpha(1);
+        dough.body.enable = true;
+    
 
         //bounce
         this.tweens.add({
@@ -222,9 +225,9 @@ export class Game extends Scene
             }
         });
 
-        this.time.delayedCall(2000, () => {
-            // flicker
-            this.tweens.add({
+        // flicker
+        dough.flickerTimer = this.time.delayedCall(2000, () => {
+            dough.flickerTween = this.tweens.add({
                 targets: dough,
                 alpha: 0.2,
                 duration: 100,
@@ -232,11 +235,31 @@ export class Game extends Scene
                 yoyo: true,
                 repeat: -1
             });
+
         });
 
-        this.time.delayedCall(5000, () => {
-            dough.destroy();
+        dough.despawnTimer = this.time.delayedCall(7000, () => {
+            this.despawnDough(dough)
         });
+        
+
+
+    }
+
+    despawnDough(dough) {
+        if (dough.flickerTimer) dough.flickerTimer.remove();
+
+        if (dough.despawnTimer) dough.despawnTimer.remove();
+
+        this.tweens.killTweensOf(dough);
+        this.doughs.killAndHide(dough);
+        dough.body.enable = false;
+    }
+
+    collectDough(player, dough) {
+        this.despawnDough(dough)
+        this.doughCount += 1;
+        this.events.emit('addDough', this.doughCount);
     }
 
     update()
