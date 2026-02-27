@@ -103,11 +103,12 @@ export class Game extends Scene
             maxSize: -1
         });
 
+        this.bullets = this.physics.add.group();
+
         this.spawnCircleLocatorX = 0;
         this.spawnCircleLocatorY = 0;
 
         this.physics.add.collider(this.player, this.doughs, this.collectDough, false, this);
-
 
         
 
