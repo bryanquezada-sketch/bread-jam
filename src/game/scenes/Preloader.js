@@ -68,8 +68,8 @@ export class Preloader extends Scene
         }
 
         this.load.spritesheet('pidgeon', 'pidgeonSpriteSheet.png'),{
-            frameWidth: ,
-            frameHeight: 
+            frameWidth: 32,
+            frameHeight: 32
         }
 
         this.load.spritesheet('buildings', 'Building_SpriteSheet.png', {
