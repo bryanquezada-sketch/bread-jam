@@ -19,6 +19,7 @@ export class Game extends Scene
         
         this.player = this.physics.add.sprite(this.physics.world.bounds.centerX, this.physics.world.bounds.centerY + 32, 'player').setDepth(100);
 
+        this.doughCount = 0;
 
         //this.vacuum = new Phaser.Geom.Circle(this.player.x, this.player.y, 64);
         //What's the difference between .world.enable and .add.existing?
@@ -112,8 +113,8 @@ export class Game extends Scene
 
     collectDough(player, dough) {
         dough.destroy();
-
-        this.events.emit('addDough', 1);
+        this.doughCount += 1;
+        this.events.emit('addDough', this.doughCount);
     }
 
     buildMode () {
