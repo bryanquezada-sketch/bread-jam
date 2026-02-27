@@ -62,6 +62,16 @@ export class Preloader extends Scene
         this.load.image('b18', 'sourdough.jpg');
         this.load.image('b19', 'swiss.jpg');
 
+        this.load.spritesheet('fireball', 'fireballSpriteSheet.png'),{
+            frameWidth: 32,
+            frameHeight: 32
+        }
+
+        this.load.spritesheet('pidgeon', 'pidgeonSpriteSheet.png'),{
+            frameWidth: ,
+            frameHeight: 
+        }
+
         this.load.spritesheet('buildings', 'Building_SpriteSheet.png', {
             frameWidth: 128,
             frameHeight: 128
