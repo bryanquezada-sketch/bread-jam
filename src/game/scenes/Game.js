@@ -144,14 +144,19 @@ export class Game extends Scene
 
     }
 
-    loseHP() {
-        console.log('HIT');
-        console.log(this.hp);
+    loseHP(player, bullet) {
+        this.despawnBullet(player, bullet);
         this.hp -= 1;
         this.events.emit('loseHP', this.hp);
         if (this.hp === 0) {
             this.events.emit('playerLost');
         }
+    }
+
+    despawnBullet(player, bullet) {
+        this.tweens.killTweensOf(bullet);
+        this.bullets.killAndHide(bullet);
+        bullet.body.enable = false;
     }
 
     shootBullets() {
@@ -175,7 +180,7 @@ export class Game extends Scene
     }
 
 
-    buildMode () {
+    buildMode() {
         //console.log('BUILD MODE: ACTIVE')
 
         if (this.cameraZoomActive === false) {
@@ -195,7 +200,6 @@ export class Game extends Scene
         }
     }
 
-    
     construction = (pointer, gameObject) => {
 
         //CHARGES YOU FOR BREAD, THE FUCKING CAPITALIST PIG 
@@ -320,7 +324,7 @@ export class Game extends Scene
     }
 
     collectDough(player, dough) {
-        this.despawnDough(dough)
+        this.despawnDough(dough);
         this.doughCount += 1;
         this.events.emit('addDough', this.doughCount);
     }
@@ -377,7 +381,7 @@ export class Game extends Scene
                 const distance = Phaser.Math.Distance.Between(bullet.x, bullet.y, 896, 512);
 
                 if (distance > 1500) {
-                    this.bullets.killAndHide
+                    this.bullets.killAndHide(bullet);
                     bullet.body.enable = false
                 }
             }
