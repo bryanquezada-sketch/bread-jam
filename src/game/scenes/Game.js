@@ -198,6 +198,16 @@ export class Game extends Scene
             this.input.on('gameobjectdown', this.construction, this);
 
         }
+
+        if (!this.bulletTimer.paused) {
+            this.bulletTimer.paused = true;
+        }
+
+        this.bullets.children.each(bullet => {
+            if (bullet.active) {
+                this.despawnBullet(this.player, bullet);
+            }
+        })
     }
 
     construction = (pointer, gameObject) => {
@@ -374,6 +384,7 @@ export class Game extends Scene
             this.debugGraphics.clear()
             this.input.off('gameobjectdown', this.construction, this);
             //console.log("Player stopped shopping");
+            this.bulletTimer.paused = false;
         }
 
         this.bullets.children.each(bullet => {
