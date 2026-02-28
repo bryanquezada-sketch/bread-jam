@@ -26,16 +26,11 @@ export class Game extends Scene
 
         this.breadAssets = ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'b10', 'b11', 'b12', 'b13', 'b14', 'b15', 'b16', 'b17', 'b18', 'b19'];
 
-        //this.vacuum = new Phaser.Geom.Circle(this.player.x, this.player.y, 64);
         //What's the difference between .world.enable and .add.existing?
         //Why is it easier to use a sprite rather than just use a circle zone?
-        //CONSIDER MAKING PLAYER A CIRCLE INSTEAD...IF YOU CAN"T ADD FIRE!
         this.vacuum = this.add.zone(this.player.x, this.player.y, 128, 128);
         this.physics.add.existing(this.vacuum);
         this.vacuum.body.setCircle(64);
-
-        //const vacuumCircle = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
-        //vacuumCircle.strokeCircleShape(this.vacuum);
 
         this.cameras.main.startFollow(this.player, true, 1, 1, 0, 0);
 
@@ -75,7 +70,7 @@ export class Game extends Scene
                     let zone = this.add.zone(screenX, screenY, 256, 256).setInteractive().setOrigin(0).setData({
                         id: id,
                         isOccupied: false,
-                        income: 'oneCoin'
+                        // income: 'oneCoin' //A failed idea...one day..
                     });
                 }
 
@@ -114,11 +109,21 @@ export class Game extends Scene
 
         this.physics.add.overlap(this.player, this.doughs, this.collectDough, false, this);
 
-        //Change 20 to test wall hugging bullets distance. Or just fucking make a sprite to show where 20 is you hack. Or learn math you pleb.
-        this.bulletSpawn = Phaser.Math.Between(0, this.scale.width - 20);
+        this.bulletOval = new Phaser.Geom.Ellipse(this.scale.width/2, this.scale.height/2, 2000, 1200);
+        //this.shopCircle = { x: this.scale.width / 2, y: this.scale.height / 2, }
 
         /// --- END OF CREATE ---
+
     }
+
+    shootBullets (){
+        const spawnPoint  = new Phaser.Geom.Point();
+        this.bulletOval.getPoint(Math.random(), spawnPoint);
+        const bullet = this.bullets.get(spawnPoint.x, spawnPoint.y);
+        this.physics.moveTo(bullet, 1792/2, 1024/2, 200);
+    }
+
+
     buildMode () {
         //console.log('BUILD MODE: ACTIVE')
 
@@ -315,7 +320,7 @@ export class Game extends Scene
             this.input.off('gameobjectdown', this.construction, this);
             //console.log("Player stopped shopping");
         }
-        //console.log('Current Income: ' + this.incomeGeneration);
+
     }
 }
 
