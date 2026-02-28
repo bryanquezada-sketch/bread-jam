@@ -134,24 +134,29 @@ export class Game extends Scene
             loop: true,
             paused: false
         });
-
-        this.time.addEvent({
-            delay: 1000,
-            callback: () => {
-                console.log(`Bullets Active: ${this.bullets.getTotalUsed()} | Free: ${this.bullets.getTotalFree()}`);
-            },
-            loop: true
-        });
         
         /// --- END OF CREATE ---
 
+        this.hp = 3;
+
+        this.physics.add.collider(this.player, this.bullets, this.loseHP, false, this);
+
+
     }
 
-    shootBullets () {
+    loseHP() {
+        console.log('HIT');
+        console.log(this.hp);
+        this.hp -= 1;
+        this.events.emit('loseHP', this.hp);
+        if (this.hp === 0) {
+            this.events.emit('playerLost');
+        }
+    }
+
+    shootBullets() {
         const targetPoint = new Phaser.Geom.Point();
         this.bulletTarget.getRandomPoint(targetPoint);
-
-        console.log(targetPoint.x, targetPoint.y); 
 
         //Rectangle new spawnpoint for testing
         const spawnPoint = new Phaser.Geom.Point();
@@ -377,6 +382,8 @@ export class Game extends Scene
                 }
             }
         })
+
+
 
         //this.shootBullets();
     }
