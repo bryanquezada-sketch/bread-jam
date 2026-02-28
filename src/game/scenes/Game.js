@@ -111,6 +111,7 @@ export class Game extends Scene
         this.physics.add.overlap(this.player, this.doughs, this.collectDough, false, this);
 
         
+        //Lets just try a rectangle BIGGER THAN THE MAP! Activate for testing, see what feels best
         this.bulletRect = new Phaser.Geom.Rectangle(-100, -100, 1992, 1224);
         //this.bulletOval = new Phaser.Geom.Ellipse(this.physics.world.bounds.width / 2, this.physics.world.bounds.height / 2, 2000, 1200);
 
@@ -118,31 +119,26 @@ export class Game extends Scene
         this.physics.world.on('worldbounds', (body) => {
             const gameObject = body.gameObject;
             this.bullets.killAndHide(gameObject);
-        });
+        })
 
 
-        this.spawnPoint = new Phaser.Geom.Point();
+        const debugSpawn = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
+        debugSpawn.setDepth(1000);
+        debugSpawn.strokeRectShape(this.bulletRect);
 
-        this.bulletTimer = this.time.addEvent({
-            delay: 500,
-            callback: this.shootBullets,
-            callbackScope: this,
-            loop: true,
-            paused: false,
-        });
         /// --- END OF CREATE ---
 
     }
 
-    shootBullets() {
+    shootBullets (){
         //Rectangle new spawnpoint for testing
+        const spawnPoint = new Phaser.Geom.Point();
         //const spawnPoint  = new Phaser.Geom.Point();
-        this.bulletRect.getPoint(Math.random(), this.spawnPoint);
-        const bullet = this.bullets.get(this.spawnPoint.x, this.spawnPoint.y);
+        this.bulletRect.getPoint(Math.random(), spawnPoint);
+        const bullet = this.bullets.get(spawnPoint.x, spawnPoint.y);
 
         if (bullet) {
             bullet.setActive(true).setVisible(true);
-            bullet.body.reset(this.spawnPoint.x, this.spawnPoint.y);
             this.physics.moveTo(bullet, 1792/2, 1024/2 - 128, 200);
             bullet.body.onWorldBounds = true;
             bullet.setCollideWorldBounds(true);
@@ -150,11 +146,10 @@ export class Game extends Scene
     }
 
 
-    buildMode() {
+    buildMode () {
         //console.log('BUILD MODE: ACTIVE')
 
         if (this.cameraZoomActive === false) {
-            this.bulletTimer.paused = true;
             const zoom = Math.max(this.scale.width / 1792, this.scale.height / 1024);
             this.cameras.main.zoomTo(zoom, 1000, 'Expo.easeOut', true);
 
@@ -227,8 +222,7 @@ export class Game extends Scene
             delay: 2000,
             callback: this.spawnDough,
             callbackScope: this,
-            loop: true,
-            paused: false
+            loop: true
         })
     }
 
@@ -343,13 +337,14 @@ export class Game extends Scene
 
         if (this.cameraZoomActive && !playerIsShopping) {
             this.cameraZoomActive = false;
-            this.bulletTimer.paused = false;
             this.cameras.main.zoomTo(1, 500, 'Expo.easeIn', true);
             this.debugGraphics.clear()
             this.input.off('gameobjectdown', this.construction, this);
             //console.log("Player stopped shopping");
         }
 
+
+        this.shootBullets();
     }
 }
 
