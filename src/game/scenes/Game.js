@@ -101,7 +101,8 @@ export class Game extends Scene
         this.breads = this.physics.add.group();
 
         this.bullets = this.physics.add.group({
-            defaultKey: 'fire'
+            defaultKey: 'fire',
+            maxSize: 500
         });
 
         this.spawnCircleLocatorX = 0;
@@ -109,18 +110,31 @@ export class Game extends Scene
 
         this.physics.add.overlap(this.player, this.doughs, this.collectDough, false, this);
 
-        this.bulletOval = new Phaser.Geom.Ellipse(this.scale.width/2, this.scale.height/2, 2000, 1200);
-        //this.shopCircle = { x: this.scale.width / 2, y: this.scale.height / 2, }
+        this.bulletOval = new Phaser.Geom.Ellipse(this.physics.world.bounds.width / 2, this.physics.world.bounds.height / 2, 2000, 1200);
+        
+        //Lets just try a rectangle BIGGER THAN THE MAP! Activate for testing, see what feels best
+        //this.bulletRect = new Phaser.Geom.Rectangle(-100, -100, 1992, 1224);
+        this.bulletRect = new Phaser.Geom.Rectangle()
+
+        
 
         /// --- END OF CREATE ---
 
     }
 
     shootBullets (){
+        //Rectangle new spawnpoint for testing
+        //const spawnPoint = new Phaser.Geom.Rectangle.GetPoint(bulletRect, Math.random());
         const spawnPoint  = new Phaser.Geom.Point();
         this.bulletOval.getPoint(Math.random(), spawnPoint);
         const bullet = this.bullets.get(spawnPoint.x, spawnPoint.y);
-        this.physics.moveTo(bullet, 1792/2, 1024/2, 200);
+        this.physics.moveTo(bullet, 1792/2, 1024/2 - 128, 200);
+
+        if (bullet) {
+            bullet.setActive(true).setVisible(true);
+            bullet.body.onWorldBounds = true;
+            bullet.setCollideWorldBounds(true);
+        }
     }
 
 
@@ -321,6 +335,8 @@ export class Game extends Scene
             //console.log("Player stopped shopping");
         }
 
+
+        //this.shootBullets();
     }
 }
 
