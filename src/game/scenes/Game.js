@@ -101,7 +101,7 @@ export class Game extends Scene
         this.breads = this.physics.add.group();
 
         this.bullets = this.physics.add.group({
-            defaultKey: 'fire',
+            defaultKey: 'square',
             maxSize: 500
         });
 
@@ -122,13 +122,17 @@ export class Game extends Scene
             this.bullets.killAndHide(gameObject);
         })
 
-
+        /*
         const debugSpawn = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
         debugSpawn.setDepth(1000);
         debugSpawn.strokeRectShape(this.bulletRect);
+        */
+
+        this.bulletSpeed = 200
+        this.spawnRate = 300
 
         this.bulletTimer = this.time.addEvent({
-            delay: 200,
+            delay: this.spawnRate,
             callback: this.shootBullets,
             callbackScope: this,
             loop: true,
@@ -150,6 +154,7 @@ export class Game extends Scene
         this.events.emit('loseHP', this.hp);
         if (this.hp === 0) {
             this.events.emit('playerLost');
+            this.input.keyboard.enabled = false;
         }
     }
 
@@ -172,10 +177,13 @@ export class Game extends Scene
 
         if (bullet) {
             bullet.setActive(true).setVisible(true);
+            bullet.setDepth(5000);
             bullet.body.enable = true;
             bullet.body.reset(spawnPoint.x, spawnPoint.y);
+            bullet.body.setSize(8, 8);
+            bullet.body.setOffset(4, 4);
             bullet.setCollideWorldBounds(false);
-            this.physics.moveTo(bullet, targetPoint.x, targetPoint.y, 200);
+            this.physics.moveTo(bullet, targetPoint.x, targetPoint.y, this.bulletSpeed);
         }
     }
 
@@ -213,7 +221,7 @@ export class Game extends Scene
     construction = (pointer, gameObject) => {
 
         //CHARGES YOU FOR BREAD, THE FUCKING CAPITALIST PIG 
-        /*
+        
         if (gameObject.type === 'Zone' ) {
             if (gameObject.getData('isOccupied') === false) {
                 if (this.doughCount >= 10) {
@@ -230,9 +238,9 @@ export class Game extends Scene
                 };
             }
         }
-        */
+        
 
-        /**/
+        /*
         //MAKES SHOP FAKE FOR TESTING, LETS YOU SPAWN BREAD TILES ON CLICK
 
             if (gameObject.type === 'Zone' ) {
@@ -253,13 +261,15 @@ export class Game extends Scene
                 console.log('This zone is already occupied.');
             };
         }
-        
+        */
     }
 
     createSpawner() {
         this.spawnCircle = new Phaser.Geom.Circle(this.spawnCircleLocatorX + 128, this.spawnCircleLocatorY + 128, 128);
+        /*
         const drawCircle = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
         drawCircle.strokeCircleShape(this.spawnCircle);
+        */
 
         this.time.addEvent({
             delay: 2000,
