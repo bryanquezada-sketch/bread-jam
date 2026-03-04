@@ -282,7 +282,6 @@ export class Game extends Scene
 
         const dough = this.doughs.get(rdm.x, rdm.y);
 
-
         if (!dough) return;
 
         dough.body.reset(rdm.x, rdm.y);
@@ -293,13 +292,14 @@ export class Game extends Scene
         dough.setBodySize(12, 7);
         dough.setOffset(2, 7);
         dough.setAlpha(1);
-        dough.setDepth(5000)
+        dough.setDepth(5000);
     
 
         //bounce
         this.tweens.add({
             targets: dough,
-            y: dough.y -30,
+            start: (dough) => target.y,
+            to: (dough) => target.y - 50,
             duration: 250,
             //try cubic
             ease: 'Quad.easeOut',
@@ -308,7 +308,6 @@ export class Game extends Scene
             onComplete: () => {
                 dough.setFrame(0);
                 dough.body.enable = true;
-                dough.setActive(true);
                 console.log('ADD SOUND FX HERE');
             }
         });
