@@ -73,9 +73,9 @@ export class Preloader extends Scene
             frameHeight: 32
         });
 
-        this.load.spritesheet('buildings', 'Building_SpriteSheet.png', {
-            frameWidth: 128,
-            frameHeight: 128
+        this.load.spritesheet('dough', 'dough.png', {
+            frameWidth: 16,
+            frameHeight: 16
         });
     }
 
