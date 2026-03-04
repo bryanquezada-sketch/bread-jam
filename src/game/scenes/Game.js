@@ -141,7 +141,7 @@ export class Game extends Scene
 
         this.hp = 3;
 
-        this.physics.add.collider(this.player, this.bullets, this.loseHP, false, this);
+        this.physics.add.overlap(this.player, this.bullets, this.loseHP, false, this);
 
 
     }
@@ -184,7 +184,6 @@ export class Game extends Scene
             this.physics.moveTo(bullet, targetPoint.x, targetPoint.y, this.bulletSpeed);
         }
     }
-
 
     buildMode() {
         //console.log('BUILD MODE: ACTIVE')
@@ -287,13 +286,13 @@ export class Game extends Scene
         if (!dough) return;
 
         dough.body.reset(rdm.x, rdm.y);
-        dough.setActive(true);
+        dough.body.enable = false;
+        dough.setFrame(1);
         dough.setVisible(true);
         dough.setScale(2);
         dough.setBodySize(12, 7);
         dough.setOffset(2, 7);
         dough.setAlpha(1);
-        dough.body.enable = true;
         dough.setDepth(5000)
     
 
@@ -307,6 +306,9 @@ export class Game extends Scene
             yoyo: true,
             //easeYoyo: 'Quad.easeIn',
             onComplete: () => {
+                dough.setFrame(0);
+                dough.body.enable = true;
+                dough.setActive(true);
                 console.log('ADD SOUND FX HERE');
             }
         });
@@ -347,6 +349,7 @@ export class Game extends Scene
     }
 
     collectDough(player, dough) {
+        if (!dough.body.enable) return;
         this.despawnDough(dough);
         this.doughCount += 1;
         this.events.emit('addDough', this.doughCount);
