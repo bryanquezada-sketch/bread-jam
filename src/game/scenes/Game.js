@@ -126,11 +126,11 @@ export class Game extends Scene
         debugSpawn.strokeRectShape(this.bulletRect);
         */
 
-        this.bulletSpeed = 200
-        this.spawnRate = 300
+        this.bulletSpeed = 250
+        this.spawnDelay = 200
 
         this.bulletTimer = this.time.addEvent({
-            delay: this.spawnRate,
+            delay: this.spawnDelay,
             callback: this.shootBullets,
             callbackScope: this,
             loop: true,
