@@ -263,7 +263,7 @@ export class Game extends Scene
     }
 
     createSpawner() {
-        this.spawnCircle = new Phaser.Geom.Circle(this.spawnCircleLocatorX + 128, this.spawnCircleLocatorY + 128, 128);
+        const spawnCircle = new Phaser.Geom.Circle(this.spawnCircleLocatorX + 128, this.spawnCircleLocatorY + 128, 128);
         /*
         const drawCircle = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 } });
         drawCircle.strokeCircleShape(this.spawnCircle);
@@ -272,13 +272,14 @@ export class Game extends Scene
         this.time.addEvent({
             delay: 2000,
             callback: this.spawnDough,
+            args: [spawnCircle],
             callbackScope: this,
             loop: true
         })
     }
 
-    spawnDough() {
-        const rdm = this.spawnCircle.getRandomPoint();
+    spawnDough(circle) {
+        const rdm = circle.getRandomPoint();
 
         const dough = this.doughs.get(rdm.x, rdm.y);
 
