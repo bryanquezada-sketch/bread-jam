@@ -11,7 +11,7 @@ export class Game extends Scene
     {
         this.scene.launch('UIScene');
         this.scene.bringToTop('UIScene'); 
-        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0).setDisplaySize(1792, 1500).setOrigin(0, 0.25);
+        this.add.image(0, 0, 'bg').setAlpha(0.5).setOrigin(0).setDisplaySize(1792, 1500);
         this.cameras.main.setBackgroundColor(0x404040);
         this.physics.world.setBounds(0, 0, 1792, 1024);
         this.cameras.main.setBounds(0, 0, 1792, 1024);
@@ -26,8 +26,6 @@ export class Game extends Scene
 
         this.breadAssets = ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'b10', 'b11', 'b12', 'b13', 'b14', 'b15', 'b16', 'b17', 'b18', 'b19'];
 
-        //What's the difference between .world.enable and .add.existing?
-        //Why is it easier to use a sprite rather than just use a circle zone?
         this.vacuum = this.add.zone(this.player.x, this.player.y, 128, 128);
         this.physics.add.existing(this.vacuum);
         this.vacuum.body.setCircle(64);
@@ -177,7 +175,7 @@ export class Game extends Scene
 
         if (bullet) {
             bullet.setActive(true).setVisible(true);
-            bullet.setDepth(5000);
+            bullet.setDepth(10000);
             bullet.body.enable = true;
             bullet.body.reset(spawnPoint.x, spawnPoint.y);
             bullet.body.setSize(8, 8);
@@ -292,6 +290,7 @@ export class Game extends Scene
         dough.setVisible(true);
         dough.setAlpha(1);
         dough.body.enable = true;
+        dough.setDepth(5000)
     
 
         //bounce
