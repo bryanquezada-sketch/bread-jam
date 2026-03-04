@@ -288,6 +288,9 @@ export class Game extends Scene
         dough.body.reset(rdm.x, rdm.y);
         dough.setActive(true);
         dough.setVisible(true);
+        dough.setScale(2);
+        dough.setBodySize(12, 7);
+        dough.setOffset(2, 7);
         dough.setAlpha(1);
         dough.body.enable = true;
         dough.setDepth(5000)
