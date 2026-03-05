@@ -57,7 +57,9 @@ export class Game extends Scene
                 let screenY = y * tileSize;
 
                 if (lot[y][x] === 0) {
-                    this.add.image(screenX, screenY, 'bakery').setOrigin(0);
+                    const bakery = this.add.image(screenX, screenY, 'bakery').setOrigin(0);
+                    bakery.setDisplaySize(333, 330);
+                    bakery.setDisplayOrigin(30, 30);
                     this.shop = this.add.zone(screenX, screenY, 256, 256).setOrigin(0);
                     this.physics.add.existing(this.shop, true);
                     this.physics.add.overlap(this.player, this.shop, this.buildMode, null, this);
