@@ -127,7 +127,7 @@ export class Game extends Scene
         */
 
         this.bulletSpeed = 250
-        this.spawnDelay = 200
+        this.spawnDelay = 275
 
         this.bulletTimer = this.time.addEvent({
             delay: this.spawnDelay,
@@ -139,7 +139,7 @@ export class Game extends Scene
         
         /// --- END OF CREATE ---
 
-        this.hp = 3;
+        this.hp = 10;
 
         this.physics.add.overlap(this.player, this.bullets, this.loseHP, false, this);
 
@@ -230,6 +230,11 @@ export class Game extends Scene
                     this.spawnCircleLocatorX = gameObject.x;
                     this.spawnCircleLocatorY = gameObject.y;
                     this.createSpawner();
+                    this.breadBaked += 1;
+                    if (this.breadBaked === 21) {
+                    console.log('YOU WIN!');
+                    this.events.emit('playerWon');
+                }
                 } else {
                 console.log('This zone is already occupied.');
                 };
@@ -282,8 +287,9 @@ export class Game extends Scene
 
         const dough = this.doughs.get(rdm.x, rdm.y);
 
-
         if (!dough) return;
+
+        dough.isBouncing = true;
 
         dough.setActive(true)
         dough.setVisible(true);
@@ -306,6 +312,7 @@ export class Game extends Scene
             yoyo: true,
             onComplete: () => {
                 dough.setFrame(0);
+                dough.isBouncing = false
                 //console.log('ADD SOUND FX HERE');
             }
         });
@@ -347,13 +354,13 @@ export class Game extends Scene
             dough.despawnTimer.remove();
         }
 
+        dough.isBouncing = false;
         dough.body.enable = false;
         this.doughs.killAndHide(dough);
-        dough.setActive(false);
     }
 
     collectDough(player, dough) {
-        if (!dough.body.enable) return;
+        if (!dough.body.enable || dough.isBouncing) return;
         this.despawnDough(dough);
         this.doughCount += 1;
         this.events.emit('addDough', this.doughCount);

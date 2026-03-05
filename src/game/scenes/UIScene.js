@@ -15,7 +15,7 @@ export class UIScene extends Scene {
             fill: '#ffffff' 
         });
 
-        this.hpCounter = this.add.text(0, 32, `HP: 3`, {
+        this.hpCounter = this.add.text(0, 32, `HP: 10`, {
             fontSize: '32px',
             fill: '#ffffff' 
         });
