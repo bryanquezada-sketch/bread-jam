@@ -282,37 +282,34 @@ export class Game extends Scene
 
         const dough = this.doughs.get(rdm.x, rdm.y);
 
+
         if (!dough) return;
 
-        dough.body.reset(rdm.x, rdm.y);
-        dough.body.enable = false;
-        dough.setFrame(1);
+        dough.setActive(true)
         dough.setVisible(true);
+
+        dough.body.reset(rdm.x, rdm.y);
+        dough.body.enable = true;
+
+        dough.setFrame(1);
         dough.setScale(2);
         dough.setBodySize(12, 7);
         dough.setOffset(2, 7);
         dough.setAlpha(1);
         dough.setDepth(5000);
-    
 
-        //bounce
-        this.tweens.add({
+        dough.bounce = this.tweens.add({
             targets: dough,
-            start: (dough) => target.y,
-            to: (dough) => target.y - 50,
+            y: { start: dough.y, to: dough.y - 30 },
             duration: 250,
-            //try cubic
             ease: 'Quad.easeOut',
             yoyo: true,
-            //easeYoyo: 'Quad.easeIn',
             onComplete: () => {
                 dough.setFrame(0);
-                dough.body.enable = true;
-                console.log('ADD SOUND FX HERE');
+                //console.log('ADD SOUND FX HERE');
             }
         });
 
-        // flicker
         dough.flickerTimer = this.time.delayedCall(2000, () => {
             dough.flickerTween = this.tweens.add({
                 targets: dough,
@@ -334,17 +331,25 @@ export class Game extends Scene
     }
 
     despawnDough(dough) {
+        if (dough.bounce) {
+            dough.bounce.remove();
+        }
+
         if (dough.flickerTimer) {
             dough.flickerTimer.remove();
+        }
+
+        if (dough.flickerTween) {
+            dough.flickerTween.remove();
         }
 
         if (dough.despawnTimer) {
             dough.despawnTimer.remove();
         }
 
-        this.tweens.killTweensOf(dough);
-        this.doughs.killAndHide(dough);
         dough.body.enable = false;
+        this.doughs.killAndHide(dough);
+        dough.setActive(false);
     }
 
     collectDough(player, dough) {
